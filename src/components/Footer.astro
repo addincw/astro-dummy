@@ -1,0 +1,41 @@
+---
+import Social from "./Social.astro";
+
+const platform = "github";
+const username = "addincw";
+---
+<style>
+  footer {
+    margin-top: 2rem;
+  }
+
+  footer ul {
+    list-style-type: none;
+    padding-inline-start: 0;
+    display: flex;
+  }
+
+  footer ul > li {
+    margin-right: 8px;
+  }
+</style>
+
+<footer>
+    <p>
+        Learn more about my projects on
+        <a href={`https://www.${platform}.com/${username}`}>{platform}</a>!
+    </p>
+
+    <p>Reach out me on:</p>
+    <ul>
+        <li>
+            <Social platform="instagram" username={username} />
+        </li>
+        <li>
+            <Social platform="twitter" username={username} />
+        </li>
+        <li>
+            <Social platform="linkedin" username={username} />
+        </li>
+    </ul>
+</footer>
