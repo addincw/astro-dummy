@@ -5,32 +5,27 @@ import BlogPost from "../../components/BlogPost.astro";
 
 export const getStaticPaths = (async () => {
   const posts = await Astro.glob("../posts/*.md");
-  const props = { posts };
+  const uniqueTags = new Set(
+    posts.map((post) => post.frontmatter?.tags || []).flat()
+  );
 
-  return [
-    { params: { tag: "astro" }, props },
-    { params: { tag: "blogging" }, props },
-    { params: { tag: "successes" }, props },
-    { params: { tag: "community" }, props },
-    { params: { tag: "blogging" }, props },
-    { params: { tag: "setbacks" }, props },
-    { params: { tag: "learning in public" }, props },
-  ];
+  return Array.from(uniqueTags).map((tag) => {
+    const filteredPosts = posts.filter((post) =>
+      post.frontmatter.tags?.includes(tag)
+    );
+    return { params: { tag }, props: { posts: filteredPosts } };
+  });
 }) satisfies GetStaticPaths;
 
 const { tag } = Astro.params;
 const { posts } = Astro.props;
-
-const filteredPosts = posts.filter((post) =>
-  post.frontmatter.tags?.includes(tag)
-);
 ---
 
 <BaseLayout pageTitle={tag}>
   <p>Posts tagged with {tag}</p>
   <ul>
     {
-      filteredPosts.map((post) => (
+      posts.map((post) => (
         <BlogPost title={post.frontmatter.title} url={post.url} />
       ))
     }
